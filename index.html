@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ja" data-theme="scarlet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ポケモンSV元ネタ推測図鑑</title>
+  <meta name="description" content="『ポケットモンスター スカーレット・バイオレット』のポケモン・人物・地名・アイテム・技の名前の元ネタを推測してまとめた、個人作成の非公式クイズ図鑑。">
+  <meta name="theme-color" content="#9c0019">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SV元ネタ図鑑">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=M+PLUS+Rounded+1c:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply the saved theme before paint to avoid a flash
+    (function () {
+      var t = 'auto';
+      try { t = localStorage.getItem('pmz.theme') || 'auto'; } catch (e) {}
+      if (t === 'ghost') t = 'cassiopeia';
+      if (t === 'auto') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'cassiopeia' : 'scarlet';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M16 3 27 9.5v13L16 29 5 22.5v-13z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 3v26M5 9.5 27 22.5M27 9.5 5 22.5" stroke="currentColor" stroke-width="1.2" opacity=".55"/><circle cx="16" cy="16" r="3.2" fill="currentColor"/></svg>
+        </span>
+        <div>
+          <h1>ポケモンSV元ネタ推測図鑑</h1>
+          <p class="brand-sub">Scarlet · Violet Name Origins</p>
+        </div>
+      </div>
+      <div class="theme-wrap">
+        <button class="icon-btn" id="themeBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu" title="テーマ">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.1"/><circle cx="10.5" cy="7.3" r="1.1"/><circle cx="15" cy="7.5" r="1.1"/></svg>
+          <span class="lbl">テーマ</span>
+        </button>
+        <div class="theme-menu" id="themeMenu" role="menu" hidden></div>
+      </div>
+    </header>
+
+    <div class="spoil-bar" id="spoilBar"></div>
+
+    <main>
+      <!-- ===== Quiz ===== -->
+      <section class="view" id="view-quiz" aria-label="クイズ">
+        <div id="quizSetup" class="stack">
+          <p class="lead">名前を見て元ネタを当てたり、元ネタから名前を当てたりするクイズです。由来はすべて<strong>推測</strong>です。</p>
+          <div class="modes" id="modeList"></div>
+
+          <details class="settings" id="settingsBox">
+            <summary><span>出題の設定</span><span class="summary-line" id="settingsSummary"></span></summary>
+            <div class="settings-body">
+              <div class="settings-grid">
+                <label class="field">
+                  <span>問題数</span>
+                  <select id="optCount">
+                    <option value="5">5 問</option>
+                    <option value="10" selected>10 問</option>
+                    <option value="20">20 問</option>
+                    <option value="30">30 問</option>
+                    <option value="0">全部</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>選択肢のとり方</span>
+                  <select id="optDistract">
+                    <option value="same">同じカテゴリから（難しい）</option>
+                    <option value="any">カテゴリを混ぜる（やさしい）</option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <p class="field"><span>出題するカテゴリ</span></p>
+                <div class="chips" id="quizCats"></div>
+                <p class="hint" id="poolHint"></p>
+              </div>
+              <label class="check"><input type="checkbox" id="optWeak" checked> 間違えた問題を多めに出す</label>
+              <label class="check"><input type="checkbox" id="optAuto"> 正解したら自動で次の問題へ</label>
+            </div>
+          </details>
+        </div>
+
+        <div id="quizPlay" hidden>
+          <div class="quiz-top">
+            <button class="text-btn" id="quitBtn" type="button">&larr; やめる</button>
+            <span class="score-label" id="scoreLabel"></span>
+            <span class="progress-label" id="progressLabel"></span>
+          </div>
+          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          <p class="prompt" id="prompt"></p>
+          <div class="q-card" id="qCard"></div>
+          <div class="choices" id="choices"></div>
+          <div class="explain" id="explain" aria-live="polite"></div>
+          <div class="quiz-actions">
+            <button class="btn ghost" id="flipBtn" type="button" hidden>めくる</button>
+            <button class="btn ghost" id="knownNo" type="button" hidden>まだ</button>
+            <button class="btn" id="knownYes" type="button" hidden>覚えた</button>
+            <button class="btn" id="nextBtn" type="button" hidden>次へ</button>
+          </div>
+        </div>
+
+        <div id="quizResult" class="result" hidden>
+          <p class="prompt" id="resultMode"></p>
+          <p class="result-score"><span id="resultScore">0</span><small id="resultTotal"></small></p>
+          <p class="result-title" id="resultTitle"></p>
+          <div class="row" style="justify-content:center">
+            <button class="btn" id="againBtn" type="button">もう一度</button>
+            <button class="btn ghost" id="retryMissBtn" type="button" hidden>間違えた問題だけ</button>
+            <button class="btn ghost" id="backBtn" type="button">形式を選ぶ</button>
+          </div>
+          <div class="review" id="review"></div>
+        </div>
+      </section>
+
+      <!-- ===== List ===== -->
+      <section class="view" id="view-list" aria-label="一覧">
+        <div class="lib-tools">
+          <input type="search" id="libSearch" placeholder="検索（例：スペイン語、寿司、NaCl、0906、わざマシン020）" aria-label="一覧を検索">
+          <details class="type-filter" id="libCatBox">
+            <summary>カテゴリで絞り込む<span class="sel" id="libCatSel"></span></summary>
+            <div class="chips" id="libCats" style="padding:4px 14px 12px"></div>
+          </details>
+          <details class="type-filter" id="libTypeBox">
+            <summary>タイプで絞り込む（ポケモン）<span class="sel" id="libTypeSel"></span></summary>
+            <div class="type-btns" id="libTypes"></div>
+            <p class="hint">2つまで選べます。2つ選ぶと、両方のタイプを持つポケモンだけが出ます。<button class="text-btn" id="libTypeClear" type="button">選択を解除</button></p>
+          </details>
+          <div class="row">
+            <select id="libSort" aria-label="並び順">
+              <option value="default">カテゴリ順</option>
+              <option value="paldea">パルデア図鑑・わざマシン番号順</option>
+              <option value="national">全国図鑑番号順</option>
+              <option value="kana">五十音順</option>
+              <option value="en">英語名順</option>
+              <option value="power">技の威力順</option>
+              <option value="weak">正答率の低い順</option>
+            </select>
+            <label class="check small"><input type="checkbox" id="libHide"> 由来を隠す（タップで表示）</label>
+          </div>
+          <div class="row lib-fold">
+            <button class="text-btn" id="libExpand" type="button">すべて開く</button>
+            <button class="text-btn" id="libCollapse" type="button">すべて閉じる</button>
+          </div>
+        </div>
+        <p class="hint" id="libCount"></p>
+        <div id="libList"></div>
+      </section>
+
+      <!-- ===== Coverage ===== -->
+      <section class="view" id="view-coverage" aria-label="収録状況">
+        <h2 class="sub-head" style="margin-top:0">収録状況</h2>
+        <p class="lead">アプリに収録している名前の数です。ネタバレ設定に関係なく全体を数えていて、名前そのものは表示しません。すべての言葉を網羅することを目指したものではなく、作者が気になった言葉を少しずつ増やしている推測図鑑です。</p>
+        <div class="cov-big" id="covBig" style="margin-top:14px"></div>
+        <h2 class="sub-head">カテゴリと小分類</h2>
+        <p class="hint" style="margin-top:0">棒の長さは件数。カテゴリを開くと、小分類ごとの件数が見られます。</p>
+        <div class="panel" id="covCats"></div>
+        <h2 class="sub-head">主な内訳</h2>
+        <div class="panel" id="covScopes"></div>
+        <h2 class="sub-head">ネタバレ段階ごとの件数</h2>
+        <p class="hint" style="margin-top:0">どの段階で、どんな種類の言葉に出会うか。色が濃いほど件数が多い。</p>
+        <div class="panel" id="covSpoil"></div>
+        <h2 class="sub-head">推測について</h2>
+        <div class="panel" id="covConf"></div>
+      </section>
+
+      <!-- ===== Settings ===== -->
+      <section class="view" id="view-settings" aria-label="設定">
+        <h2 class="sub-head" style="margin-top:0">ネタバレ対策</h2>
+        <div class="panel" id="spoilPanel">
+          <h3>表示・出題する範囲</h3>
+          <p class="hint" style="margin-top:0">チェックした段階の情報だけが、一覧とクイズ（選択肢を含む）に出てきます。</p>
+          <div class="checks" id="spoilChecks" style="margin-top:10px"></div>
+        </div>
+        <div class="panel" style="margin-top:12px">
+          <h3>ポケモンの進化</h3>
+          <p class="hint" style="margin-top:0">進化の方法や条件を知らずに遊びたいときは、オフにしてください。</p>
+          <div class="checks" id="evoChecks" style="margin-top:10px"></div>
+        </div>
+        <div class="panel" style="margin-top:12px">
+          <h3>カテゴリ</h3>
+          <div class="checks two" id="catChecks"></div>
+        </div>
+        <h2 class="sub-head">表示</h2>
+        <div class="panel">
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="optEn" checked> 英語版の名前と由来を表示する<small>オフにすると日本語の情報だけになり、英語のクイズ形式も隠れます</small></label>
+            <label class="check"><input type="checkbox" id="optEv" checked> 根拠（公式ずかんの分類・説明の要約など）を表示する</label>
+          </div>
+        </div>
+        <h2 class="sub-head">英語の読み上げ</h2>
+        <div class="panel" id="voicePanel">
+          <p class="hint" style="margin-top:0">英語の名前の横の ♪ を押すと、英語の音声で読み上げます。</p>
+          <div class="voice-grid">
+            <label for="voiceSel">音声</label><select id="voiceSel"></select>
+            <label for="voiceRate">速度 <output id="voiceRateOut"></output></label><input type="range" id="voiceRate" min="0.5" max="1.5" step="0.1">
+            <label for="voiceVol">音量 <output id="voiceVolOut"></output></label><input type="range" id="voiceVol" min="0" max="1" step="0.1">
+          </div>
+          <div class="row" style="margin-top:10px"><button class="btn ghost small" id="voiceTest" type="button">♪ 試しに聞く（Pokémon）</button></div>
+          <p class="hint" id="voiceNone" hidden>このブラウザでは音声の読み上げが使えないか、英語の音声が見つかりませんでした。</p>
+        </div>
+        <h2 class="sub-head">テーマ</h2>
+        <div class="panel"><div class="chips" id="themeChips"></div></div>
+        <h2 class="sub-head">データ</h2>
+        <div class="panel">
+          <p style="margin:0 0 10px">正答率と設定は、この端末のブラウザの中だけに保存されます。外部へ送信することはありません。</p>
+          <div class="row">
+            <button class="btn ghost small" id="resetStats" type="button">正答率の記録を消す</button>
+            <button class="btn ghost small" id="showGate" type="button">最初の注意書きをもう一度見る</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== About ===== -->
+      <section class="view prose" id="view-about" aria-label="説明">
+        <h2>このアプリについて</h2>
+        <p>『ポケットモンスター スカーレット・バイオレット』に出てくるポケモン・人物・地名・アイテム・技・料理・お店・ファッションなどの名前について、「元ネタはたぶんこれだろう」という推測をまとめ、一覧で読んだりクイズで覚えたりできるようにした図鑑です。日本語名と英語名の両方を扱っています。</p>
+        <p>名前の由来を知ると、スペインを思わせるパルデアの町並み、料理やお菓子にちなんだ地名、植物の名前を持つ登場人物たちなど、作品に込められた遊び心や世界観が見えてきます。このアプリは、正解を決めることではなく、<strong>「元ネタは多分これだろう」と想像しながら、ゲームをより深く楽しむこと</strong>を目的としています。「ほかにもこんな説があるのでは？」と考えるきっかけにもしてもらえたらうれしいです。</p>
+
+        <div class="notice spoil">
+          <b>ネタバレにご注意ください</b>
+          <p>ゲーム本編の終盤やエンディング後に関わる名前も収録しています。「設定」でネタバレの段階を選ぶと、チェックしていない段階の情報は一覧にもクイズの選択肢にも出てきません。</p>
+        </div>
+        <div class="notice">
+          <b>個人が作成した非公式のファンアプリです</b>
+          <p>任天堂・株式会社ポケモン・ゲームフリーク・クリーチャーズ、その他の権利者様とは一切関係ありません。権利者様へのお問い合わせはご遠慮ください。ポケモンの名前・画像の権利は各権利者に帰属します。</p>
+        </div>
+        <div class="notice">
+          <b>由来はすべて推測です</b>
+          <p>公式が名前の由来を明らかにしていることはほとんどありません。ここに書いた内容は、言葉の響きや公式ずかんの分類・説明文などをもとにした作者の推測で、正しいとは限りません。</p>
+        </div>
+
+        <h3>対象範囲</h3>
+        <p>『スカーレット・バイオレット』を追加コンテンツなしで遊んでいて出会う言葉が対象です。追加コンテンツ「ゼロの秘宝」（キタカミの里・ブルーベリー学園）のものと、ほかの作品のセーブデータ・ポケモンHOME・配信がないと手に入らない道具や姿（伝説のポケモンに関わる道具、プレート など）は収録していません。</p>
+
+        <h3>ネタバレの段階</h3>
+        <dl class="defs" id="spoilDefs"></dl>
+
+        <h3>クイズの形式</h3>
+        <dl class="defs">
+          <dt>元ネタ当て</dt><dd>名前を見て、日本語名の由来を4択で選びます。</dd>
+          <dt>名前当て</dt><dd>由来の説明を見て、どの名前のことかを4択で選びます。</dd>
+          <dt>英語名当て／日本語名当て</dt><dd>日本語名と英語名の対応を4択で答えます。</dd>
+          <dt>英語名の元ネタ</dt><dd>英語名を見て、英語名の由来を4択で選びます。</dd>
+          <dt>めくりカード</dt><dd>名前を見て由来を思い出し、めくって確認します。「覚えた」「まだ」で自己採点します。</dd>
+        </dl>
+        <p>間違えた問題ほど多く出題されます（設定でオフにできます）。</p>
+
+        <h3>推測の確からしさ</h3>
+        <dl class="defs">
+          <dt><span class="conf">★★★</span> ほぼ確実</dt><dd>綴りや言葉の対応がはっきりしているもの（例：NaCl→コジオ系）。</dd>
+          <dt><span class="conf">★★<span class="off">★</span></span> 有力</dt><dd>意味や図鑑の説明と合っていて、よく言われている説。</dd>
+          <dt><span class="conf">★<span class="off">★★</span></span> 諸説あり</dt><dd>根拠が弱い、または由来がはっきりしないもの。</dd>
+        </dl>
+
+        <h3>アプリとして使う</h3>
+        <p>ホーム画面に追加すると、アプリのように全画面で使えます。https:// で公開されたページから追加した場合は、一度開いたあとオフラインでも動きます。</p>
+        <ul class="sources">
+          <li>iPhone（Safari）：共有ボタン →「ホーム画面に追加」</li>
+          <li>Android（Chrome）：メニュー →「アプリをインストール」または「ホーム画面に追加」</li>
+          <li>パソコン（Chrome／Edge）：アドレスバーのインストールボタン</li>
+        </ul>
+        <button class="btn small" id="installBtn" type="button" hidden>アプリとしてインストール</button>
+
+        <h3>参考にした情報</h3>
+        <ul class="sources">
+          <li><a href="https://zukan.pokemon.co.jp/" target="_blank" rel="noopener">ポケモンずかん（公式・日本語）</a>：分類・説明文（原文は載せず、要約しています）</li>
+          <li><a href="https://www.pokemon.com/us/pokedex" target="_blank" rel="noopener">Pokédex（公式・英語）</a>：英語名・英語版の分類</li>
+          <li><a href="https://www.pokemon.co.jp/ex/sv/ja/" target="_blank" rel="noopener">『ポケットモンスター スカーレット・バイオレット』公式サイト</a>：人物・地名</li>
+          <li><a href="https://wiki.xn--rckteqa2e.com/" target="_blank" rel="noopener">ポケモンWiki</a>・<a href="https://bulbapedia.bulbagarden.net/" target="_blank" rel="noopener">Bulbapedia</a>（英語のポケモン百科事典）：名前の由来の説の照らし合わせ</li>
+          <li><a href="https://pokeapi.co/" target="_blank" rel="noopener">PokéAPI</a>：図鑑番号・わざマシンの番号・日英の名前の確認</li>
+        </ul>
+        <p>由来は、これらの情報を参考にしながら作者が自分で調べて考えた推測です。説がいくつもあるものは、なるべく多く並べています（先頭が作者の考える本命）。</p>
+        <p>ポケモンのカードには、進化の系統と進化の方法、姿・フォルム、公式ずかん（日本語）・Pokédex（英語）・ポケモンWiki・Bulbapedia へのリンクがあります。進化の系統の名前をタップすると、そのポケモンのカードへ移動します。</p>
+      </section>
+    </main>
+
+    <p class="foot-mini">個人作成の非公式ファンアプリです。権利者様とは関係ありません。由来はすべて推測です。</p>
+  </div>
+
+  <nav class="bottom-nav" aria-label="メニュー">
+    <button class="nav-item" data-view="list" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10.5a3 3 0 0 1 3 3V19.5H8a3 3 0 0 1-3-3z"/><path d="M5 16.5a3 3 0 0 1 3-3h10.5M9 8h6"/></svg>
+      <span>一覧</span>
+    </button>
+    <button class="nav-item" data-view="quiz" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4M12 16.6v.2"/></svg>
+      <span>クイズ</span>
+    </button>
+    <button class="nav-item" data-view="coverage" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M7 16.5V11M12 16.5V6.5M17 16.5v-8"/></svg>
+      <span>収録</span>
+    </button>
+    <button class="nav-item" data-view="settings" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+      <span>設定</span>
+    </button>
+    <button class="nav-item" data-view="about" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/></svg>
+      <span>説明</span>
+    </button>
+  </nav>
+
+  <dialog class="gate" id="gate" aria-labelledby="gateTitle">
+    <form method="dialog" class="gate-body" id="gateForm">
+      <h2 id="gateTitle">はじめに</h2>
+      <div class="notice">
+        <b>個人作成の非公式ファンアプリです</b>
+        <p>任天堂・株式会社ポケモン・ゲームフリーク・クリーチャーズ等とは関係ありません。名前の由来はすべて作者の推測で、公式の情報ではありません。</p>
+      </div>
+      <div class="notice spoil">
+        <b>ネタバレ注意</b>
+        <p>『スカーレット・バイオレット』本編の終盤・エンディング後に関わる名前も収録しています。見てもよい範囲にチェックを入れてください（あとから「設定」で変えられます）。</p>
+      </div>
+      <div class="checks" id="gateChecks"></div>
+      <p class="hint" style="margin:14px 0 6px">ポケモンの進化について</p>
+      <div class="checks" id="gateEvoChecks"></div>
+      <div class="gate-actions">
+        <button class="btn" value="ok" type="submit">この範囲ではじめる</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="data-pokemon.js"></script>
+  <script src="data-tm.js"></script>
+  <script src="data-movestats.js"></script>
+  <script src="data-items.js"></script>
+  <script src="data-items2.js"></script>
+  <script src="data-materials.js"></script>
+  <script src="data-bag.js"></script>
+  <script src="data-life.js"></script>
+  <script src="data-fashion.js"></script>
+  <script src="data-trainers.js"></script>
+  <script src="data-marks.js"></script>
+  <script src="data-abilities.js"></script>
+  <script src="data-abilities2.js"></script>
+  <script src="data-shoplocs.js"></script>
+  <script src="data-food.js"></script>
+  <script src="data-natures.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
