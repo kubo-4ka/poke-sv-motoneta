@@ -542,3 +542,23 @@ dd.unk { color: var(--ink-soft); font-size: 13px; }
 .heat td { text-align: center; padding: 6px 4px; border-radius: 6px; font: 600 12.5px var(--latin); background: color-mix(in srgb, var(--accent) calc(var(--a, 0) * 100%), var(--surface-2)); color: var(--ink); }
 .heat td.hi { color: var(--accent-ink); }
 .heat tfoot td { background: transparent; font-weight: 700; }
+
+/* ---------- 図鑑 ---------- */
+.badge.dex-kitakami { border-color: #2f8f6b; color: #2f8f6b; }
+.badge.dex-blueberry { border-color: #3b6fd1; color: #3b6fd1; }
+.dex-fold > summary .dex-desc { display: block; font: 500 11px/1.4 var(--sans); color: var(--muted); }
+.dex-fold.dex-kitakami > summary { border-left: 4px solid #2f8f6b; }
+.dex-fold.dex-blueberry > summary { border-left: 4px solid #3b6fd1; }
+.dex-fold.dex-paldea > summary { border-left: 4px solid var(--accent); }
+.stat small { color: var(--muted); font-size: 11px; }
+
+.evo-hidden { color: var(--muted); letter-spacing: .1em; }
+
+/* ---------- とくせいを持っているポケモン ---------- */
+.holders { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.holders small { color: var(--muted); }
+.badge.dex-kitakami, .badge.dex-blueberry { font-weight: 700; }
+
+/* ---------- 姿ごとのタイプ ---------- */
+.ty-group { display: inline-flex; align-items: center; gap: 2px; padding: 1px 4px 1px 2px; border: 1px solid var(--line, rgba(127,127,127,.3)); border-radius: 999px; }
+.ty-form { font-size: .72em; color: var(--muted); padding: 0 3px; white-space: nowrap; }

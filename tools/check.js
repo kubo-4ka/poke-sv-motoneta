@@ -5,7 +5,7 @@
  *   node tools/check.js
  * データを編集したら、tools/coverage.js と合わせて実行してください。問題があると終了コード 1 で終わります。
  *
- * 見ているもの：必須項目の欠け、同じカテゴリ内の名前の重複、パルデア図鑑・わざマシン番号の欠番と重複、
+ * 見ているもの：必須項目の欠け、同じカテゴリ内の名前の重複、パルデア・キタカミ・ブルーベリー図鑑とわざマシン番号の欠番と重複、
  * 進化・姿・出店先・食事パワーの参照切れ、クイズで正解が決まらない問題、主な内訳の件数の変化。
  * （外部の一覧に対してすべてそろっていることを保証するものではありません。作者のベストエフォートです）
  */
@@ -49,7 +49,10 @@ const seq = (label, nums, from, to) => {
   for (let i = from; i <= to; i++) if (!set.has(i)) err(`${label} ${i} が欠番`);
 };
 seq('パルデア図鑑', ENTRIES.filter((e) => e.c === 'pokemon' && e.p).map((e) => e.p), 1, 400);
-seq('わざマシン', ENTRIES.filter((e) => e.tm).map((e) => e.tm), 1, 171);
+seq('わざマシン', ENTRIES.filter((e) => e.tm && e.tm <= 171).map((e) => e.tm), 1, 171);
+seq('わざマシン（追加コンテンツ）', ENTRIES.filter((e) => e.tm > 171).map((e) => e.tm), 172, 229);
+seq('キタカミ図鑑', ENTRIES.filter((e) => e.c === 'pokemon' && e.kd).map((e) => e.kd), 1, 200);
+seq('ブルーベリー図鑑', ENTRIES.filter((e) => e.c === 'pokemon' && e.bd).map((e) => e.bd), 1, 243);
 
 // 4. 参照切れ
 const pokeNames = new Set(ENTRIES.filter((e) => e.c === 'pokemon').map((e) => e.ja));

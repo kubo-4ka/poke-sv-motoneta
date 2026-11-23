@@ -43,15 +43,15 @@ const CATS = {
 
 const SPOILERS = [
   { label: '序盤', desc: 'ゲーム開始〜テーブルシティ・アカデミー入学のころまでに分かる情報' },
-  { label: '本編', desc: '3つのストーリー（ジム・スター団・ヌシ）の道中で出会うポケモン・人物・技' },
-  { label: '終盤', desc: '各ストーリーの終盤、チャンピオンテスト・ポケモンリーグ、伝説・災厄のポケモン' },
-  { label: 'クリア後', desc: 'エンディング以降の物語、エリアゼロ、パラドックスポケモン' }
+  { label: '本編', desc: '3つのストーリー（ジム・スター団・ヌシ）の道中で出会うポケモン・人物・技。追加コンテンツの道中で出会うポケモンもここ' },
+  { label: '終盤', desc: '各ストーリーの終盤、チャンピオンテスト・ポケモンリーグ、伝説・災厄のポケモン。追加コンテンツの物語の山場で出会う伝説のポケモンもここ' },
+  { label: 'クリア後', desc: 'エンディング以降の物語、エリアゼロ、パラドックスポケモン。追加コンテンツのエピローグ・クリア後に出会うポケモンもここ' }
 ];
 
 const BASE_ENTRIES = [
   // ===== 人物 =====
-  { c: 'person', ja: 'ハルト', en: 'Florian', sp: 0, cf: 2, jo: ['「晴る（はる）」「春（はる）」＋「ト」。アオイと合わせて「青春」になるという説', '晴翔・陽翔など、発売当時に人気の男の子の名前の響き'], eo: ['flora（花）＋-ian。植物にちなむ名が多いパルデアの人名に合わせたとみられる', 'ラテン系の男性名 Florian'], ev: '主人公の初期名。日本語版と英語版で別の名前になっている。', t: ['hero'] },
-  { c: 'person', unk: '英語名 Juliana の由来は、公式にもポケモンWiki・Bulbapedia にも説明が見つかりませんでした。', ja: 'アオイ', en: 'Juliana', sp: 0, cf: 1, jo: ['葵（あおい、植物）', 'ハルトと合わせて「青春」の「青」', '発売当時に人気の女の子の名前'], eo: ['女性名 Juliana。はっきりした由来は見つからない', 'Julian／July（7月）の女性形の響き'], ev: '主人公の初期名。', t: ['hero'] },
+  { c: 'person', ja: 'ハルト', en: 'Florian', sp: 0, cf: 2, jo: ['「晴る（はる）」「春（はる）」＋「ト」（翔・斗・人など、男の子の名前によくある「〜と」）。アオイと合わせて「青春」になるという説', '晴翔・陽翔など、発売当時に人気の男の子の名前の響き'], eo: ['flora（花）＋-ian。植物にちなむ名が多いパルデアの人名に合わせたとみられる', 'ラテン系の男性名 Florian'], ev: '主人公の初期名。日本語版と英語版で別の名前になっている。', t: ['hero'] },
+  { c: 'person', unk: '英語名 Juliana の由来は、公式にもポケモンWiki・Bulbapedia にも説明が見つかりませんでした。英語名の説は、議論のたたき台としての推測です。', ja: 'アオイ', en: 'Juliana', sp: 0, cf: 1, jo: ['葵（あおい、植物）', 'ハルトと合わせて「青春」の「青」', '発売当時に人気の女の子の名前'], eo: ['女性名 Juliana。ハルトの英語名 Florian と同じ「-ian」の響きでそろえた', 'July（7月、夏）。ハルト（春）と季節を対にした、という見方', 'Julian（ユリウス）の女性形。ヨーロッパの王家などに多い格調ある名前'], ev: '主人公の初期名。', t: ['hero'] },
   { c: 'person', ja: 'ネモ', en: 'Nemona', sp: 0, cf: 2, jo: ['ネモフィラ（瑠璃唐草、青い花）', 'anemone（アネモネ）の一部', 'ラテン語 nemo（だれでもない）'], eo: ['Nemophila（ネモフィラ）の響き', 'anemone（アネモネ）'], ev: 'パルデアの主要人物は植物名に由来するものが多い。', t: ['rival'] },
   { c: 'person', ja: 'ペパー', en: 'Arven', sp: 0, cf: 2, jo: ['pepper（コショウ）。料理好きな性格とも一致', 'peppermint（ペパーミント）'], eo: ['ハッカ（和種ミント）の学名 Mentha arvensis の種小名 arvensis', 'ノルウェー語などの人名 Arven（「遺産」の意味）'], ev: '日英とも「ミント」に行き着く。', t: ['rival'] },
   { c: 'person', ja: 'ボタン', en: 'Penny', sp: 0, cf: 3, jo: ['牡丹（ぼたん、花）', '服のボタン、コンピューターのボタン（ハッカーの特技）'], eo: ['peony（牡丹）→ Penny', 'penny（1セント硬貨）の響き'], ev: '日英で同じ花（牡丹）を指す。', t: ['rival'] },
@@ -59,7 +59,7 @@ const BASE_ENTRIES = [
   { c: 'person', ja: 'オーリム', en: 'Sada', sp: 3, cf: 2, jo: ['olim（ラテン語で「かつて・昔」）。スカーレット（古代の側）の博士', 'aurum（ラテン語で金）の響き'], eo: 'pasado（スペイン語で「過去」）の後半', ev: 'スカーレットに登場する博士。日英とも「過去」を意味する語からとみられる。', t: ['prof'] },
   { c: 'person', ja: 'フトゥー', en: 'Turo', sp: 3, cf: 3, jo: 'futurum（ラテン語）／futuro（スペイン語）＝未来', eo: 'futuro（スペイン語で「未来」）の後半', ev: 'バイオレットに登場する博士。日英とも「未来」を意味する語から。', t: ['prof'] },
   { c: 'person', ja: 'ジニア', en: 'Jacq', sp: 0, cf: 2, jo: 'zinnia（百日草）', eo: ['百日草の学名の命名者として付く植物学者ジャカンの略記「Jacq.」', 'jack（男性名）の響き'], ev: '生物の先生。', t: ['teacher'] },
-  { c: 'person', unk: '英語名 Miriam がなぜこの名前なのかは、裏取りできませんでした。', ja: 'ミモザ', en: 'Miriam', sp: 0, cf: 1, jo: 'mimosa（ミモザ、アカシアの花）', eo: ['Mimosa の「Mi-」で始まる女性名', 'myrrh（没薬＝薬草）の響き'], ev: '保健室の先生。', t: ['teacher'] },
+  { c: 'person', unk: '英語名 Miriam がなぜこの名前なのかは、裏取りできませんでした。英語名の説は、議論のたたき台としての推測です。', ja: 'ミモザ', en: 'Miriam', sp: 0, cf: 1, jo: 'mimosa（ミモザ、アカシアの花）', eo: ['Mimosa の「Mi-」で始まる女性名', 'Miriam（聖書に出てくる女性の名前。落ち着いた大人の響き）', 'myrrh（没薬＝昔から薬に使われた樹脂）の響き。保健の先生らしく'], ev: '保健室の先生。', t: ['teacher'] },
   { c: 'person', ja: 'キハダ', en: 'Dendra', sp: 0, cf: 3, jo: '黄檗（きはだ、ミカン科の木）', eo: 'キハダの学名 Phellodendron の -dendron（ギリシャ語で木）', ev: 'バトル学の先生。', t: ['teacher'] },
   { c: 'person', ja: 'サワロ', en: 'Saguaro', sp: 0, cf: 3, jo: 'saguaro（サワロ、ベンケイチュウという巨大なサボテン）', eo: 'saguaro（サワロ）', ev: '家庭科の先生。', t: ['teacher'] },
   { c: 'person', ja: 'タイム', en: 'Tyme', sp: 0, cf: 3, jo: 'thyme（タイム、ハーブ）＋time（時間）', eo: 'thyme（タイム）＋time（時間）', ev: '数学の先生。', t: ['teacher'] },
@@ -69,7 +69,7 @@ const BASE_ENTRIES = [
   { c: 'person', ja: 'カエデ', en: 'Katy', sp: 0, cf: 2, jo: '楓（かえで）', eo: ['katydid（キリギリスの仲間）。むしタイプ使いに合わせた', 'Katsura（カツラ、木の名前）の響き'], ev: 'セルクルタウンのジムリーダー（むし）。', t: ['gym'] },
   { c: 'person', ja: 'コルサ', en: 'Brassius', sp: 1, cf: 3, jo: 'colza（スペイン語でセイヨウアブラナ）', eo: ['Brassica（アブラナ属の学名）', 'brass（真ちゅう）＋芸術家らしいラテン風の語尾 -ius'], ev: 'ボウルタウンのジムリーダー（くさ）。日英とも同じ植物を指す。', t: ['gym'] },
   { c: 'person', ja: 'ハイダイ', en: 'Kofu', sp: 1, cf: 2, jo: '海帯（中国語 hǎidài＝昆布）', eo: ['kombu（昆布）の響き'], ev: 'カラフシティのジムリーダー（みず）で料理人。日英とも昆布を指すとみられる。', t: ['gym'] },
-  { c: 'person', ja: 'ナンジャモ', en: 'Iono', sp: 1, cf: 2, jo: ['ナンジャモンジャ（ヒトツバタゴの俗称）', '「なんじゃ」（驚き）＋「も」'], eo: ['ion（イオン＝電気）', 'エアプランツ Tillandsia ionantha'], ev: 'ハッコウシティのジムリーダー（でんき）で配信者。', t: ['gym'] },
+  { c: 'person', ja: 'ナンジャモ', en: 'Iono', sp: 1, cf: 2, jo: ['ナンジャモンジャ（ヒトツバタゴの俗称）', '「なんじゃ」（驚き）＋「も」（「なんじゃも〜」と口ぐせのように驚く響き）'], eo: ['ion（イオン＝電気）', 'エアプランツ Tillandsia ionantha'], ev: 'ハッコウシティのジムリーダー（でんき）で配信者。', t: ['gym'] },
   { c: 'person', ja: 'アオキ', en: 'Larry', sp: 1, cf: 2, jo: ['アオキ（青木、ありふれた庭木）', 'よくある苗字「青木」'], eo: 'アオキの英名 Japanese laurel → Laurel → Larry', ev: 'チャンプルタウンのジムリーダー（ノーマル）。「普通の人」らしさを名前でも表している。', t: ['gym'] },
   { c: 'person', ja: 'ライム', en: 'Ryme', sp: 1, cf: 3, jo: ['lime（ライム）', 'rhyme（ラップの韻）'], eo: ['rime（霧氷）', 'rhyme（韻）'], ev: 'フリッジタウンのジムリーダー（ゴースト）でラッパー。', t: ['gym'] },
   { c: 'person', ja: 'リップ', en: 'Tulip', sp: 1, cf: 3, jo: ['チューリップ', 'lip（唇、メイクアップアーティスト）'], eo: 'tulip（チューリップ）', ev: 'ベイクタウンのジムリーダー（エスパー）。', t: ['gym'] },
@@ -85,7 +85,7 @@ const BASE_ENTRIES = [
   { c: 'person', ja: 'カシオペア', en: 'Cassiopeia', sp: 1, cf: 3, jo: 'カシオペヤ座', eo: 'Cassiopeia（カシオペヤ座）', ev: 'スター団のボスを名乗る人物。各チームの名もカシオペヤ座の星に由来する。', t: ['star'] },
 
   // ===== 地名・施設 =====
-  { c: 'place', unk: '公式に由来は説明されていません。スペイン語やパエリアとの関係は、響きからの推測です。', ja: 'パルデア地方', en: 'Paldea', sp: 0, cf: 1, jo: 'スペイン語 aldea（村）、paella（パエリア）などを連想させる造語と推測', eo: '日本語名と同じ', ev: 'モデルはイベリア半島（スペイン・ポルトガル）とされる。町の名は料理や台所道具にちなむものが多い。' },
+  { c: 'place', unk: '公式に由来は説明されていません。ここに並べた説は、議論のたたき台としての推測です。', ja: 'パルデア地方', en: 'Paldea', sp: 0, cf: 1, jo: ['paella（パエリア＝スペインの料理）', 'aldea（スペイン語で「村」）', 'pal（仲間）＋dea（ラテン語で女神）', 'Iberia（イベリア半島）・pardo（スペイン語で茶色、大地の色）の響き'], eo: '日本語名と同じ', ev: 'モデルはイベリア半島（スペイン・ポルトガル）とされる。町の名は料理や台所道具にちなむものが多い。' },
   { c: 'place', ja: 'コサジタウン', en: 'Cabo Poco', sp: 0, cf: 3, jo: '小さじ（こさじ）', eo: 'cabo（スペイン語で岬）＋poco（少し）', ev: '冒険が始まる小さな町。', t: ['town'] },
   { c: 'place', ja: 'プラトタウン', en: 'Los Platos', sp: 0, cf: 3, jo: 'plato（スペイン語で皿）', eo: 'los platos（スペイン語で「皿たち」）', ev: '', t: ['town'] },
   { c: 'place', ja: 'テーブルシティ', en: 'Mesagoza', sp: 0, cf: 3, jo: 'テーブル', eo: 'mesa（スペイン語でテーブル）＋Zaragoza（スペインの都市サラゴサ）', ev: 'アカデミーのある大都市。', t: ['town'] },
@@ -121,7 +121,6 @@ const BASE_ENTRIES = [
   { c: 'item', ja: 'パンチグローブ', en: 'Punching Glove', sp: 1, cf: 3, jo: 'パンチ＋グローブ', eo: 'punching glove', ev: 'パンチ技を強くする持ち物。', t: ['held9'] },
   { c: 'item', ja: 'おんみつマント', en: 'Covert Cloak', sp: 1, cf: 3, jo: '隠密（おんみつ）＋マント', eo: 'covert（隠れた）＋cloak（外套）', ev: '技の追加効果を受けない持ち物。', t: ['held9'] },
   { c: 'item', ja: 'いかさまダイス', en: 'Loaded Dice', sp: 1, cf: 3, jo: 'いかさま（不正）＋ダイス', eo: 'loaded dice（重りを仕込んだいかさまのサイコロ、英語の慣用表現）', ev: '連続技の回数を増やしやすくする持ち物。', t: ['held9'] },
-  { c: 'item', ja: 'ようせいのハネ', en: 'Fairy Feather', sp: 1, cf: 3, jo: '妖精（ようせい）＋羽（はね）', eo: 'fairy＋feather', ev: 'フェアリータイプの技を強くする持ち物。', t: ['held9'] },
   { c: 'item', ja: 'イワイノヨロイ', en: 'Auspicious Armor', sp: 1, cf: 3, jo: '祝いの鎧（いわいのよろい）。カタカナで古風な響きに', eo: 'auspicious（縁起の良い）＋armor', ev: 'カルボウをグレンアルマに進化させる。「イワイ」と「ノロイ」で対になっている。', t: ['evo9'] },
   { c: 'item', ja: 'ノロイノヨロイ', en: 'Malicious Armor', sp: 1, cf: 3, jo: '呪いの鎧（のろいのよろい）。カタカナで古風な響きに', eo: 'malicious（悪意のある）＋armor', ev: 'カルボウをソウブレイズに進化させる。', t: ['evo9'] },
   { c: 'item', ja: 'かしらのしるし', en: "Leader's Crest", sp: 2, cf: 3, jo: '頭（かしら＝首領）の印（しるし）', eo: 'leader（首領）＋crest（紋章・とさか）', ev: 'キリキザンの進化に関わる道具。', t: ['evo9'] },
@@ -251,8 +250,8 @@ BASE_ENTRIES.forEach((e) => { if (e.c === 'move') e.g9 = true; });
 
 // ほかのファイル（data-pokemon.js / data-tm.js / data-items.js）とまとめる
 const ENTRIES = typeof module !== 'undefined'
-  ? [].concat(require('./data-pokemon.js'), BASE_ENTRIES, require('./data-tm.js'), require('./data-items.js'), require('./data-items2.js'), require('./data-materials.js'), require('./data-life.js'), require('./data-fashion.js'), require('./data-trainers.js'), require('./data-marks.js'), require('./data-abilities.js'), require('./data-abilities2.js'), require('./data-natures.js'))
-  : [].concat(POKEMON_ENTRIES, BASE_ENTRIES, TM_ENTRIES, ITEM_ENTRIES, ITEM2_ENTRIES, MATERIAL_ENTRIES, LIFE_ENTRIES, FASHION_ENTRIES, TRAINER_ENTRIES, MARK_ENTRIES, ABILITY_ENTRIES, ABILITY2_ENTRIES, NATURE_ENTRIES);
+  ? [].concat(require('./data-pokemon.js'), require('./data-pokemon-dlc.js').POKEMON_DLC_ENTRIES, require('./data-pokemon-extra.js'), BASE_ENTRIES, require('./data-tm.js'), require('./data-items.js'), require('./data-items2.js'), require('./data-materials.js'), require('./data-life.js'), require('./data-fashion.js'), require('./data-trainers.js'), require('./data-marks.js'), require('./data-abilities.js'), require('./data-abilities2.js'), require('./data-natures.js'), require('./data-dlc.js'), require('./data-dlc-moves.js'), require('./data-dlc-fashion.js'))
+  : [].concat(POKEMON_ENTRIES, POKEMON_DLC_ENTRIES, POKEMON_EXTRA_ENTRIES, BASE_ENTRIES, TM_ENTRIES, ITEM_ENTRIES, ITEM2_ENTRIES, MATERIAL_ENTRIES, LIFE_ENTRIES, FASHION_ENTRIES, TRAINER_ENTRIES, MARK_ENTRIES, ABILITY_ENTRIES, ABILITY2_ENTRIES, NATURE_ENTRIES, DLC_ENTRIES, DLC_MOVE_ENTRIES, DLC_FASHION_ENTRIES);
 
 // 本編のバッグに入る道具（収録状況の分母）。ポケモンの落とし物は data-materials.js の全件
 const BAG = new Set([].concat(typeof module !== 'undefined' ? require('./data-bag.js') : BAG_ITEMS,
@@ -261,12 +260,34 @@ ENTRIES.forEach((e) => { if ((['item', 'food'].includes(e.c) || / Book$/.test(e.
 
 // ---- 一覧で分けて表示する小分類（人物・アイテム・料理・技・用語・ファッション） ----
 ENTRIES.forEach((e, i) => { e.idx0 = i; });
+
+// ---- 図鑑（パルデア・キタカミ・ブルーベリー） ----
+const DEXES = [
+  { id: 'paldea', label: 'パルデア図鑑', short: 'パルデア', key: 'p', size: 400, desc: '本編（スカーレット・バイオレット）' },
+  { id: 'kitakami', label: 'キタカミ図鑑', short: 'キタカミ', key: 'kd', size: 200, desc: '追加コンテンツ「ゼロの秘宝」前編・碧の仮面' },
+  { id: 'blueberry', label: 'ブルーベリー図鑑', short: 'ブルーベリー', key: 'bd', size: 243, desc: '追加コンテンツ「ゼロの秘宝」後編・藍の円盤。243種のうち、図鑑完成に必要なのは001〜240（241〜243のウネルミナモ・テツノイサハ・モモワロウは完成条件に含まれない）' }
+];
+const DLC = typeof module !== 'undefined' ? require('./data-pokemon-dlc.js') : { DEX_NUM, EVO_PATCH, FORM_PATCH };
+ENTRIES.forEach((e) => {
+  if (e.c !== 'pokemon') return;
+  const d = DLC.DEX_NUM[e.no];
+  if (d) { if (d[0]) e.kd = d[0]; if (d[1]) e.bd = d[1]; }
+  if (DLC.EVO_PATCH[e.no]) e.evo = DLC.EVO_PATCH[e.no];
+  if (DLC.FORM_PATCH[e.no]) e.fm = (e.fm || []).concat([DLC.FORM_PATCH[e.no]]);
+  // どの図鑑に載っているか（図鑑外で本編で手に入るポケモンはパルデアの仲間として扱う）
+  // 姿ごとのタイプ（姿の説明の「〇〇・〇〇タイプ」から）。タイプでの絞り込みに使う
+  const TYPE_JA = ['ノーマル', 'ほのお', 'みず', 'でんき', 'くさ', 'こおり', 'かくとう', 'どく', 'じめん', 'ひこう', 'エスパー', 'むし', 'いわ', 'ゴースト', 'ドラゴン', 'あく', 'はがね', 'フェアリー'];
+  e.tyAlt = (e.fm || []).map((f) => { const m = (f[2] || '').match(/^([^。（]+?)(?:タイプ)?(?:。|$)/); return m ? m[1].replace(/タイプ$/, '').split('・').filter((t) => TYPE_JA.includes(t)) : []; }).filter((ts) => ts.length);
+  e.dex = DEXES.filter((x) => e[x.key]).map((x) => x.id);
+  if (!e.dex.length) e.dex = e.dlc ? [e.dlc] : ['paldea'];
+});
 const SUB_ORDER = {
-  person: ['主人公・ライバル', '博士', 'ジムリーダー', 'ポケモンリーグ', 'スター団', 'アカデミーの先生', 'そのほかの人物', 'トレーナーの種類'],
+  person: ['主人公・ライバル', '博士', 'ジムリーダー', 'ポケモンリーグ', 'スター団', 'アカデミーの先生', 'そのほかの人物', 'トレーナーの種類', 'ゼロの秘宝の人物'],
+  place: ['パルデア地方', 'キタカミの里（碧の仮面）', 'ブルーベリー学園（藍の円盤）'],
   item: ['ボール', '回復・飲み物', '育成（ドーピング・アメ・ミント）', 'バトル用の使い捨て道具', '持ち物（バトル用）', 'タイプの技を強くする持ち物', '進化・姿を変える道具', 'テラスタル・テラピース', 'きのみ', 'お宝（売るための道具）', '大切なもの', 'ピクニック用品', 'ポケモンの落とし物'],
   food: ['サンドウィッチのレシピ', 'サンドウィッチの材料・調味料', 'お店のメニュー', 'ピクニック・食事'],
   move: ['第9世代で登場した技', 'わざマシンの技'],
-  term: ['ゲームのしくみ（システム）', 'せいかく（25種）', 'リボン・あかし・二つ名', '物語・組織・場所の言葉'],
+  term: ['ゲームのしくみ（システム）', 'せいかく（25種）', 'リボン・あかし・二つ名', '物語・組織・場所の言葉', 'ゼロの秘宝の言葉'],
   ability: ['第9世代で登場したとくせい', '第8世代までに登場したとくせい'],
   fashion: ['ブランド', '制服・上下', 'ヘッドウェア', 'アイウェア', 'グローブ', 'バッグ', 'レッグウェア', 'シューズ', 'スマホロトムのカバー']
 };
@@ -281,6 +302,17 @@ const ITEM_SUB = {
   'お宝（売るための道具）': ['Tiny Mushroom', 'Big Mushroom', 'Balm Mushroom', 'Pearl', 'Big Pearl', 'Pearl String', 'Stardust', 'Star Piece', 'Comet Shard', 'Nugget', 'Big Nugget', 'Honey', 'Rare Bone', 'Pretty Feather', 'Tiny Bamboo Shoot', 'Big Bamboo Shoot'],
   '大切なもの': ['Rotom Phone', 'TM Machine', 'Adventure Guide', 'Oval Charm', 'Shiny Charm', 'Sandwich', "Koraidon's Poké Ball", "Miraidon's Poké Ball", "Kofu's Wallet", 'Herba Mystica']
 };
+// 追加コンテンツのアイテムの小分類
+const DLC_ITEM_SUB = {
+  '進化・姿を変える道具': ['Syrupy Apple', 'Unremarkable Teacup', 'Masterpiece Teacup', 'Teal Mask', 'Wellspring Mask', 'Hearthflame Mask', 'Cornerstone Mask', 'Prism Scale', 'Reaper Cloth', 'Razor Fang', 'Metal Alloy', 'Dragon Scale', 'Upgrade', 'Dubious Disc', 'Protector', 'Electirizer', 'Magmarizer', 'Strawberry Sweet', 'Love Sweet', 'Berry Sweet', 'Clover Sweet', 'Flower Sweet', 'Star Sweet', 'Ribbon Sweet', 'DNA Splicers', 'N-Solarizer', 'N-Lunarizer', 'Galarica Cuff', 'Galarica Wreath'],
+  '育成（ドーピング・アメ・ミント）': ['Health Mochi', 'Muscle Mochi', 'Resist Mochi', 'Genius Mochi', 'Clever Mochi', 'Swift Mochi', 'Fresh-Start Mochi'],
+  'タイプの技を強くする持ち物': ['Fairy Feather'],
+  'テラスタル・テラピース': ['Stellar Tera Shard'],
+  '持ち物（バトル用）': ['Soul Dew'],
+  'お宝（売るための道具）': ['Galarica Twig'],
+  '大切なもの': ['Teal Style Card', 'Indigo Style Card', 'Crystal Cluster', 'Roto-Stick', 'Glimmering Charm', 'Synchro Machine']
+};
+Object.entries(DLC_ITEM_SUB).forEach(([sub, list]) => list.forEach((en) => { (ITEM_SUB[sub] = ITEM_SUB[sub] || []).push(en); }));
 const ITEM_SUB_OF = {};
 Object.entries(ITEM_SUB).forEach(([sub, list]) => list.forEach((en) => { ITEM_SUB_OF[en] = sub; }));
 function subOf(e) {
@@ -297,11 +329,13 @@ function subOf(e) {
   if (e.c === 'food') return t.includes('sand') ? 'サンドウィッチのレシピ' : t.includes('menu') ? 'お店のメニュー' : t.includes('ing') ? 'サンドウィッチの材料・調味料' : 'ピクニック・食事';
   if (e.c === 'move') return e.g9 ? '第9世代で登場した技' : 'わざマシンの技';
   if (e.c === 'fashion') return t.includes('brand') ? 'ブランド' : 'ヘッドウェア';
+  if (e.c === 'place') return e.dlc === 'kitakami' ? 'キタカミの里（碧の仮面）' : e.dlc === 'blueberry' ? 'ブルーベリー学園（藍の円盤）' : 'パルデア地方';
   if (e.c === 'person') {
+    if (t.includes('dlcperson')) return 'ゼロの秘宝の人物';
     if (t.includes('tclass')) return 'トレーナーの種類';
     if (t.includes('gym')) return 'ジムリーダー';
     if (t.includes('league') || e.ja === 'ハッサク' || e.ja === 'アオキ') return 'ポケモンリーグ';
-    if (t.includes('star')) return 'スター団';
+    if (t.includes('star') || t.includes('star2')) return 'スター団';
     if (t.includes('teacher')) return 'アカデミーの先生';
     if (t.includes('prof')) return '博士';
     if (t.includes('hero') || t.includes('rival')) return '主人公・ライバル';
@@ -309,6 +343,7 @@ function subOf(e) {
   }
   if (e.c === 'ability') return t.includes('ability9') ? '第9世代で登場したとくせい' : '第8世代までに登場したとくせい';
   if (e.c === 'term' && t.includes('nature')) return 'せいかく（25種）';
+  if (e.c === 'term' && t.includes('dlcterm')) return 'ゼロの秘宝の言葉';
   if (e.c === 'term') return (t.includes('mark') || t.includes('ribbon') || t.includes('markinfo')) ? 'リボン・あかし・二つ名' : t.includes('system') ? 'ゲームのしくみ（システム）' : '物語・組織・場所の言葉';
   return '';
 }
@@ -319,7 +354,21 @@ ENTRIES.forEach((e) => { const s = subOf(e); if (s) e.sub = s; });
 const ABILITY_ORD = typeof module !== 'undefined' ? require('./data-abilities2.js').ABILITY_ORDER : ABILITY_ORDER;
 ENTRIES.forEach((e) => {
   if (e.c === 'move') e.ord = e.tm || 1000 + e.idx0;
-  if (e.c === 'ability') e.ord = (ABILITY_ORD[e.en] || 999) * 10000 + e.idx0;
+  if (e.c === 'pokemon') e.ord = e.p || (e.kd ? 1000 + e.kd : e.bd ? 2000 + e.bd : 3000 + e.no);
+  if (e.c === 'ability') e.ord = (ABILITY_ORD[e.en] || 9999) * 10000 + e.idx0;
+});
+
+// ---- とくせい：持っているポケモンと、追加コンテンツで登場したとくせい ----
+const ABILITY_HOLD_ALL = typeof module !== 'undefined' ? require('./data-abilities2.js').ABILITY_HOLD : ABILITY_HOLD;
+const GEN9_DLC_ABILITY = ['Embody Aspect', 'Supersweet Syrup', 'Hospitality', 'Mind’s Eye', 'Toxic Chain', 'Tera Shift', 'Tera Shell', 'Teraform Zero', 'Poison Puppeteer'];
+const PK_BY_JA = new Map(ENTRIES.filter((e) => e.c === 'pokemon').map((e) => [e.ja, e]));
+ENTRIES.forEach((e) => {
+  if (e.c !== 'ability') return;
+  if (GEN9_DLC_ABILITY.includes(e.en)) e.t = ['ability9'];
+  e.hold = (ABILITY_HOLD_ALL[e.en] || []).filter(([ja]) => PK_BY_JA.has(ja));
+  // どの図鑑のポケモンが持っているか（その図鑑を遊んでいないときは、とくせいごと出さない）
+  e.hdex = [...new Set(e.hold.flatMap(([ja]) => PK_BY_JA.get(ja).dex))];
+  if (!e.hdex.length) e.hdex = ['paldea'];
 });
 
 // お店の出店先（data-shoplocs.js）
@@ -338,7 +387,7 @@ ENTRIES.forEach((e) => {
 });
 
 // 技の性能をまとめる
-const MOVE_STATS_ALL = typeof module !== 'undefined' ? require('./data-movestats.js') : MOVE_STATS;
+const MOVE_STATS_ALL = Object.assign({}, typeof module !== 'undefined' ? require('./data-movestats.js') : MOVE_STATS, typeof module !== 'undefined' ? require('./data-dlc-moves.js').DLC_MOVE_STATS : DLC_MOVE_STATS);
 ENTRIES.forEach((e) => {
   const st = e.c === 'move' && MOVE_STATS_ALL[e.en];
   if (st) { const [type, cls, pw, ac, pp, prio] = st; Object.assign(e, { ty: [type], mcls: cls, pw, ac, pp, prio }); }
@@ -351,33 +400,50 @@ ENTRIES.forEach((e) => {
 const SCOPES = [
   { group: 'ポケモン', label: 'パルデア図鑑（本編 400 種）', total: 400, match: (e) => e.c === 'pokemon' && !!e.p },
   { group: 'ポケモン', label: 'スカーレット・バイオレット初登場（No.906〜1008）', total: 103, match: (e) => e.c === 'pokemon' && e.no >= 906 && e.no <= 1008 },
+  { group: 'ポケモン', label: 'キタカミ図鑑（碧の仮面）', total: 200, match: (e) => e.c === 'pokemon' && !!e.kd },
+  { group: 'ポケモン', label: 'ブルーベリー図鑑（藍の円盤）', total: 243, match: (e) => e.c === 'pokemon' && !!e.bd },
+  { group: 'ポケモン', label: '追加コンテンツの図鑑だけに載っているポケモン', total: 263, match: (e) => e.c === 'pokemon' && !e.p && (!!e.kd || !!e.bd) && !(e.t || []).includes('offdex') },
+  { group: 'ポケモン', label: '追加コンテンツで初登場したポケモン（No.1009〜1025）', total: 17, match: (e) => e.c === 'pokemon' && e.no >= 1009 },
   { group: 'ポケモン', label: 'パルデア図鑑にないが本編で手に入るポケモン（交換・もらう）', total: 2, match: (e) => (e.t || []).includes('offdex') },
-  { group: 'ポケモン', label: 'パラドックスポケモン（本編）', total: 16, match: (e) => e.c === 'pokemon' && e.cat && e.cat[1] === 'Paradox Pokémon' },
-  { group: 'わざマシン', label: 'わざマシン（本編 No.001〜171）', total: 171, match: (e) => !!e.tm },
-  { group: '技', label: 'わざマシンの技のうち、第1〜8世代からある技', total: 165, match: (e) => e.c === 'move' && !!e.tm && !e.g9 },
-  { group: '技', label: '第9世代で登場した技（本編。スターモービルの技を含む）', total: 48, match: (e) => !!e.g9 },
-  { group: 'アイテム', label: '第9世代で登場した持ち物（バトル用）', total: 8, match: (e) => (e.t || []).includes('held9') },
+  { group: 'ポケモン', label: '図鑑に載らない伝説・幻のポケモン（藍の円盤のクリア後）', total: 27, match: (e) => (e.t || []).includes('offdex2') },
+  { group: 'ポケモン', label: 'パラドックスポケモン（追加コンテンツを含む）', total: 22, match: (e) => e.c === 'pokemon' && e.cat && e.cat[1] === 'Paradox Pokémon' },
+  { group: 'わざマシン', label: 'わざマシン（本編 No.001〜171）', total: 171, match: (e) => !!e.tm && e.tm <= 171 },
+  { group: 'わざマシン', label: 'わざマシン（追加コンテンツ No.172〜229）', total: 58, match: (e) => e.tm > 171 },
+  { group: '技', label: 'わざマシンの技のうち、第1〜8世代からある技（本編）', total: 165, match: (e) => e.c === 'move' && !!e.tm && e.tm <= 171 && !e.g9 },
+  { group: '技', label: '追加コンテンツのわざマシンの技と、追加コンテンツで登場した技', total: 72, match: (e) => e.c === 'move' && !!e.dlc },
+  { group: '技', label: '第9世代で登場した技（本編。スターモービルの技を含む）', total: 48, match: (e) => !!e.g9 && !e.dlc },
+  { group: 'アイテム', label: '第9世代で登場した持ち物（バトル用）', total: 7, match: (e) => (e.t || []).includes('held9') },
   { group: 'アイテム', label: '第9世代で登場した進化用の道具', total: 4, match: (e) => (e.t || []).includes('evo9') },
   { group: 'アイテム', label: '本編のバッグに入る道具すべて（わざマシンを除く）', total: BAG.size, match: (e) => !!e.bag },
   { group: 'アイテム', label: 'ポケモンの落とし物（わざマシンの材料）', total: 181, match: (e) => (e.t || []).includes('material') || e.en === 'Gimmighoul Coin' },
-  { group: 'とくせい', label: '本編のポケモンが持つとくせいすべて（隠れ特性を含む）', total: 215, match: (e) => e.c === 'ability' },
-  { group: 'とくせい', label: 'そのうち第9世代で登場したとくせい', total: 31, match: (e) => (e.t || []).includes('ability9') },
+  { group: 'とくせい', label: '収録しているポケモンが持つとくせいすべて（隠れ特性を含む）', total: 256, match: (e) => e.c === 'ability' },
+  { group: 'とくせい', label: 'そのうち第9世代で登場したとくせい（追加コンテンツを含む）', total: 40, match: (e) => (e.t || []).includes('ability9') },
   { group: '用語', label: 'せいかく', total: 25, match: (e) => (e.t || []).includes('nature') },
   { group: '人物', label: 'ジムリーダー', total: 8, match: (e) => (e.t || []).includes('gym') },
   { group: '人物', label: 'ポケモンリーグ（四天王・トップ）', total: 5, match: (e) => (e.t || []).includes('league') || e.ja === 'ハッサク' || e.ja === 'アオキ' },
   { group: '人物', label: 'スター団のボス（5 人＋カシオペア）', total: 6, match: (e) => (e.t || []).includes('star') },
   { group: '人物', label: 'アカデミーの先生（校長・保健室を含む）', total: 9, match: (e) => (e.t || []).includes('teacher') },
-  { group: '人物', label: 'トレーナーの種類（本編のパルデアで勝負するもの）', total: 23, match: (e) => (e.t || []).includes('tclass') },
-  { group: '用語', label: 'あかし（本編で付くもの）', total: 47, match: (e) => (e.t || []).includes('mark') },
-  { group: '用語', label: 'リボン（本編でもらえるもの）', total: 4, match: (e) => (e.t || []).includes('ribbon') },
+  { group: '人物', label: 'トレーナーの種類（本編のパルデアで勝負するもの）', total: 23, match: (e) => (e.t || []).includes('tclass') && !e.dlc },
+  { group: '人物', label: 'ゼロの秘宝の人物', total: 15, match: (e) => (e.t || []).includes('dlcperson') },
+  { group: '人物', label: 'ゼロの秘宝のトレーナーの種類', total: 6, match: (e) => (e.t || []).includes('tclass') && !!e.dlc },
+  { group: '地名', label: 'キタカミの里の地名（碧の仮面）', total: 20, match: (e) => e.c === 'place' && e.dlc === 'kitakami' },
+  { group: '地名', label: 'ブルーベリー学園の地名（藍の円盤）', total: 9, match: (e) => e.c === 'place' && e.dlc === 'blueberry' },
+  { group: '用語', label: 'ゼロの秘宝のあかし・リボン', total: 2, match: (e) => !!e.dlc && ((e.t || []).includes('mark') || (e.t || []).includes('ribbon')) },
+  { group: 'お店', label: 'ゼロの秘宝のお店', total: 3, match: (e) => e.c === 'shop' && !!e.dlc },
+  { group: '料理', label: 'ゼロの秘宝の料理（食事パワーつき）', total: 5, match: (e) => e.c === 'food' && !!e.dlc },
+  { group: 'ファッション', label: 'ゼロの秘宝のファッション（色違いはまとめて1件）', total: 93, match: (e) => (e.t || []).includes('clothesdlc') },
+  { group: '用語', label: 'ゼロの秘宝の言葉', total: 12, match: (e) => (e.t || []).includes('dlcterm') },
+  { group: 'アイテム', label: 'ゼロの秘宝のアイテム', total: 49, match: (e) => e.c === 'item' && !!e.dlc },
+  { group: '用語', label: 'あかし（本編で付くもの）', total: 47, match: (e) => !e.dlc && ((e.t || []).includes('mark')) },
+  { group: '用語', label: 'リボン（本編でもらえるもの）', total: 4, match: (e) => !e.dlc && ((e.t || []).includes('ribbon')) },
   { group: '地名', label: '町・都市', total: 12, match: (e) => (e.t || []).includes('town') },
   { group: '地名', label: 'パルデア十景', total: 10, match: (e) => (e.t || []).includes('sight') },
   { group: '地名', label: '災厄のポケモンの祠', total: 4, match: (e) => (e.t || []).includes('shrine') },
-  { group: 'お店', label: 'お店・飲食店（本編のチェーン店と専門店）', total: 32, match: (e) => e.c === 'shop' },
+  { group: 'お店', label: 'お店・飲食店（本編のチェーン店と専門店）', total: 32, match: (e) => !e.dlc && (e.c === 'shop') },
   { group: 'お店', label: '出店先の町が分かるお店（フレンドリィショップを除く）', total: 31, match: (e) => e.c === 'shop' && !!e.loc },
   { group: '料理', label: 'サンドウィッチのレシピ（系統）', total: 37, match: (e) => (e.t || []).includes('sand') },
-  { group: '料理', label: '飲食店のメニュー（本編。寿司のセットはまとめて数える）', total: 58, match: (e) => (e.t || []).includes('menu') },
-  { group: '料理', label: '食事パワーが分かるメニュー', total: 58, match: (e) => !!e.menu },
+  { group: '料理', label: '飲食店のメニュー（本編。寿司のセットはまとめて数える）', total: 58, match: (e) => !e.dlc && ((e.t || []).includes('menu')) },
+  { group: '料理', label: '食事パワーが分かるメニュー', total: 58, match: (e) => !e.dlc && (!!e.menu) },
   { group: '料理', label: 'レシピと食事パワーが分かるサンドウィッチの系統', total: 37, match: (e) => !!e.recipes },
   { group: '料理', label: 'サンドウィッチの材料・調味料', total: 58, match: (e) => (e.t || []).includes('ing') },
   { group: 'ファッション', label: 'ファッションブランド', total: 14, match: (e) => (e.t || []).includes('brand') },
@@ -405,4 +471,4 @@ function quizAmbiguous(modeId, list) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { CATS, SPOILERS, ENTRIES, SCOPES, SUB_ORDER, SHOPLOC, QUIZ_KEYS, quizAmbiguous };
+if (typeof module !== 'undefined') module.exports = { CATS, SPOILERS, DEXES, ENTRIES, SCOPES, SUB_ORDER, SHOPLOC, QUIZ_KEYS, quizAmbiguous };

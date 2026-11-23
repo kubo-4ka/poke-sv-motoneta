@@ -32,7 +32,12 @@ const defaultPrefs = () => ({
   rate: 0.9,
   vol: 1
 });
-const prefs = Object.assign(defaultPrefs(), store.get('pmz.prefs', {}));
+const storedPrefs = store.get('pmz.prefs', {});
+const prefs = Object.assign(defaultPrefs(), storedPrefs);
+// 遊んでいる図鑑：はじめての人はパルデア図鑑だけ。図鑑の設定ができる前から使っている人は、3つとも表示する
+const dexDefault = () => Object.fromEntries(DEXES.map((d) => [d.id, d.id === 'paldea']));
+prefs.dex = Object.assign(storedPrefs.dex ? dexDefault() : (store.get('pmz.ack', false) ? Object.fromEntries(DEXES.map((d) => [d.id, true])) : dexDefault()), storedPrefs.dex || {});
+if (!DEXES.some((d) => prefs.dex[d.id])) prefs.dex.paldea = true;
 prefs.cats = Object.assign(defaultPrefs().cats, prefs.cats || {});
 if (!Array.isArray(prefs.spoil) || prefs.spoil.length !== SPOILERS.length) prefs.spoil = defaultPrefs().spoil;
 const savePrefs = () => store.set('pmz.prefs', prefs);
@@ -42,7 +47,8 @@ const saveStats = () => store.set('pmz.stats', stats);
 const record = (e, ok) => { const s = stats[e.id] || [0, 0]; s[ok ? 0 : 1]++; stats[e.id] = s; saveStats(); };
 const rate = (e) => { const s = stats[e.id]; return s && s[0] + s[1] ? s[0] / (s[0] + s[1]) : null; };
 
-const isVisible = (e) => prefs.spoil[e.sp] && prefs.cats[e.c];
+const dexOn = (e) => (e.c === 'pokemon' ? e.dex.some((d) => prefs.dex[d]) : e.c === 'ability' ? e.hdex.some((d) => prefs.dex[d]) : !e.dlc || !!prefs.dex[e.dlc]);
+const isVisible = (e) => prefs.spoil[e.sp] && prefs.cats[e.c] && dexOn(e);
 const visibleEntries = () => ENTRIES.filter(isVisible);
 
 /* ================= Theme ================= */
@@ -94,7 +100,7 @@ document.addEventListener('click', (ev) => {
 
 /* ================= Rendering helpers ================= */
 const SP_CLASS = ['sp0', 'sp1', 'sp2', 'sp3'];
-const confStars = (cf) => `<span class="conf" title="推測の確からしさ">${'★'.repeat(cf)}<span class="off">${'★'.repeat(3 - cf)}</span></span>`;
+const confStars = (cf) => `<span class="conf" title="推測の手ごたえ：${['', '手がかりが弱い', '有力', '綴りや言葉の対応がはっきり'][cf]}">${'★'.repeat(cf)}<span class="off">${'★'.repeat(3 - cf)}</span></span>`;
 const dexSlug = (en) => en.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const pad = (n, w) => String(n).padStart(w, '0');
 // 由来は文字列か、諸説あるときは配列。先頭を代表の説としてクイズに使う
@@ -107,12 +113,27 @@ const theoryHTML = (v) => {
 };
 // 進化の系統：段階を「→」、同じ段階の分岐を「／」でつなぐ。ほかの名前はタップで一覧の検索へ
 const evoHTML = (e) => e.evo.map((stage) => stage.map(([name, how]) => {
+  const p = typeof PK_BY_JA !== 'undefined' && PK_BY_JA.get(name);
+  if (p && name !== e.ja && !isVisible(p)) return '<span class="evo-hidden" title="ネタバレ・図鑑の範囲外">？？？</span>';
   const label = name === e.ja ? `<b class="evo-self">${esc(name)}</b>` : `<button class="evo-link" type="button" data-jump="${esc(name)}">${esc(name)}</button>`;
   return label + (how && prefs.evoHow ? `<span class="evo-how">（${esc(how)}）</span>` : '');
 }).join('<span class="evo-sep">／</span>')).join('<span class="evo-arrow">→</span>');
 const formHTML = (e) => `<ul class="forms">${e.fm.map(([ja, en, note]) => `<li>${esc(ja)}${prefs.en ? ` <span class="cat-en" lang="en">${esc(en)}</span>` : ''}${note ? `<small>${esc(note)}</small>` : ''}</li>`).join('')}</ul>`;
 const TYPE_KEYS = { ノーマル: 'normal', ほのお: 'fire', みず: 'water', でんき: 'electric', くさ: 'grass', こおり: 'ice', かくとう: 'fighting', どく: 'poison', じめん: 'ground', ひこう: 'flying', エスパー: 'psychic', むし: 'bug', いわ: 'rock', ゴースト: 'ghost', ドラゴン: 'dragon', あく: 'dark', はがね: 'steel', フェアリー: 'fairy' };
 const typeHTML = (ty) => ty.map((t) => `<span class="type t-${TYPE_KEYS[t] || 'normal'}">${esc(t)}</span>`).join('');
+// 姿によってタイプが違うポケモン：上のタイプがどの姿のものかを添え、ほかの姿のタイプも並べる
+const formTypes = (e) => (e.fm || []).map((f) => {
+  const m = (f[2] || '').match(/^([^。（]+?)(?:タイプ)?(?:。|$)/);
+  const ts = m ? m[1].replace(/タイプ$/, '').split('・').filter((t) => TYPE_KEYS[t]) : [];
+  return ts.length && ts.join() !== e.ty.join() ? [f[0], ts] : null;
+}).filter(Boolean);
+const tyHeadHTML = (e) => {
+  const alt = formTypes(e);
+  if (!alt.length) return typeHTML(e.ty);
+  const base = alt.some(([n]) => n === '通常のすがた') ? 'パルデアのすがた' : ((e.fm.find((f) => !alt.some(([n]) => n === f[0])) || ['通常のすがた'])[0]);
+  const lab = (n) => `<span class="ty-form">${esc(n.replace(/のすがた/, ''))}</span>`;
+  return `<span class="ty-group" title="姿によってタイプが違います">${base ? lab(base) : ''}${typeHTML(e.ty)}</span>` + alt.map(([n, ts]) => `<span class="ty-group">${lab(n)}${typeHTML(ts)}</span>`).join('');
+};
 // 技の性能と、名前とのつながりを考える手がかりになるひとこと
 function moveNote(e) {
   const notes = [];
@@ -207,6 +228,16 @@ $('#voiceRate').addEventListener('input', (ev) => { prefs.rate = Number(ev.targe
 $('#voiceVol').addEventListener('input', (ev) => { prefs.vol = Number(ev.target.value); savePrefs(); $('#voiceVolOut').textContent = Math.round(prefs.vol * 100) + '%'; });
 $('#voiceTest').addEventListener('click', () => say('Pokémon'));
 
+// ---- とくせいを持っているポケモン（ネタバレ・図鑑の範囲にあるものだけ） ----
+function holdHTML(e) {
+  const vis = e.hold.filter(([ja]) => { const p = PK_BY_JA.get(ja); return p && isVisible(p); });
+  const hidden = e.hold.length - vis.length;
+  const MAX = 12;
+  return `<span class="holders">${vis.slice(0, MAX).map(([ja, h]) => `<button type="button" class="evo-link" data-jump="${esc(ja)}">${esc(ja)}${h ? '<small>（隠れ特性）</small>' : ''}</button>`).join('')}</span>`
+    + (vis.length > MAX ? `<small class="mnote">ほか ${vis.length - MAX} 匹</small>` : '')
+    + (hidden ? `<small class="mnote">ネタバレ・図鑑の範囲外に ${hidden} 匹</small>` : '');
+}
+
 // ---- お店の出店先（町の名前がネタバレになる場合は伏せる） ----
 const townVisible = (t) => { const p = ENTRIES.find((x) => x.c === 'place' && x.ja === t); return !p || !!prefs.spoil[p.sp]; };
 function locHTML(e) {
@@ -236,12 +267,15 @@ function entryHTML(e, opts = {}) {
   const many = theories(e.jo).length + theories(e.eo).length > 2;
   const badges = [
     `<span class="badge cat">${esc(CATS[e.c].short)}</span>`,
-    e.ty ? typeHTML(e.ty) : '',
-    e.p ? `<span class="badge" title="パルデア図鑑の番号">パルデア ${pad(e.p, 3)}</span>` : '',
+    e.ty ? tyHeadHTML(e) : '',
+    e.p ? `<span class="badge dex-paldea" title="パルデア図鑑の番号">パルデア ${pad(e.p, 3)}</span>` : '',
+    e.dlc ? `<span class="badge dex-${e.dlc}" title="追加コンテンツ「ゼロの秘宝」">${e.dlc === 'kitakami' ? '碧の仮面' : '藍の円盤'}</span>` : '',
+    e.kd ? `<span class="badge dex-kitakami" title="キタカミ図鑑の番号">キタカミ ${pad(e.kd, 3)}</span>` : '',
+    e.bd ? `<span class="badge dex-blueberry" title="ブルーベリー図鑑の番号">ブルーベリー ${pad(e.bd, 3)}</span>` : '',
     e.no ? `<span class="badge" title="全国図鑑の番号">全国 ${pad(e.no, 4)}</span>` : '',
     e.tm ? `<span class="badge" title="わざマシンの番号">わざマシン ${pad(e.tm, 3)}</span>` : '',
     `<span class="badge ${SP_CLASS[e.sp]}" title="${esc(SPOILERS[e.sp].desc)}">${esc(SPOILERS[e.sp].label)}</span>`,
-    many ? '<span class="badge" title="由来の説が複数あります">諸説あり</span>' : '',
+    many ? '<span class="badge" title="由来の説が複数あります（★はいちばん上の説の手ごたえ）">説が複数</span>' : '',
     e.unk ? '<span class="badge unk" title="裏取りできなかった点があります">不明点あり</span>' : '',
     confStars(e.cf)
   ].join('');
@@ -267,6 +301,7 @@ function entryHTML(e, opts = {}) {
       ${e.c === 'pokemon' && prefs.evo ? `<dt class="ev">進化</dt><dd class="ev evo">${e.evo ? evoHTML(e) : '進化しない'}</dd>` : ''}
       ${e.fm ? `<dt class="ev">姿</dt><dd class="ev">${formHTML(e)}</dd>` : ''}
       ${foodHTML(e)}
+      ${e.hold && e.hold.length ? `<dt class="ev">持っているポケモン</dt><dd class="ev">${holdHTML(e)}</dd>` : ''}
       ${e.loc ? `<dt class="ev">出店している町</dt><dd class="ev">${locHTML(e)}</dd>` : ''}
       ${prefs.ev && e.ev ? `<dt class="ev">根拠・補足</dt><dd class="ev">${esc(e.ev)}</dd>` : ''}
       ${e.unk ? `<dt class="unk">分からないこと</dt><dd class="unk">${esc(e.unk)}</dd>` : ''}
@@ -280,7 +315,7 @@ function renderSpoilBar() {
   const on = SPOILERS.filter((_, i) => prefs.spoil[i]).map((s) => s.label);
   const vis = visibleEntries().length;
   $('#spoilBar').innerHTML = `<span>🔒 ネタバレ範囲：<b>${on.length ? esc(on.join('・')) : 'なし'}</b></span>
-    <span>表示 ${vis} / ${ENTRIES.length} 件</span>
+    <span>利用できる名前 ${vis} / ${ENTRIES.length} 件</span>
     <button class="text-btn" type="button" data-go="settings">変更</button>`;
 }
 document.addEventListener('click', (ev) => {
@@ -550,15 +585,15 @@ function renderList() {
   const q = norm($('#libSearch').value.trim());
   let list = vis.filter((e) => libCat === 'all' || e.c === libCat);
   renderTypeFilter();
-  if (libTypes.length) list = list.filter((e) => e.c === 'pokemon' && libTypes.every((t) => (e.ty || []).includes(t)));
-  if (q) list = list.filter((e) => norm([e.ja, ...theories(e.jo), e.ev, ...(e.ty || []), e.mcls || '', e.sub || '', ...(e.fm || []).map((f) => f[0] + ' ' + f[1]), e.cat ? e.cat[0] : '', e.no ? pad(e.no, 4) : '', e.p ? 'パルデア' + pad(e.p, 3) : '', e.tm ? 'わざマシン' + pad(e.tm, 3) + ' 技マシン' + pad(e.tm, 3) : ''].concat(prefs.en ? [e.en, ...theories(e.eo), e.cat ? e.cat[1] : ''] : []).join(' ')).includes(q));
+  if (libTypes.length) list = list.filter((e) => e.c === 'pokemon' && [e.ty || []].concat(e.tyAlt || []).some((ts) => libTypes.every((t) => ts.includes(t))));
+  if (q) list = list.filter((e) => norm([e.ja, ...theories(e.jo), e.ev, ...(e.ty || []), e.mcls || '', e.sub || '', ...(e.fm || []).map((f) => f[0] + ' ' + f[1]), e.cat ? e.cat[0] : '', e.no ? pad(e.no, 4) : '', e.p ? 'パルデア' + pad(e.p, 3) : '', e.kd ? 'キタカミ' + pad(e.kd, 3) : '', e.bd ? 'ブルーベリー' + pad(e.bd, 3) : '', e.tm ? 'わざマシン' + pad(e.tm, 3) + ' 技マシン' + pad(e.tm, 3) : ''].concat(prefs.en ? [e.en, ...theories(e.eo), e.cat ? e.cat[1] : ''] : []).join(' ')).includes(q));
   if (foodPow.p) list = list.filter((e) => e.c !== 'food' || foodMatch(e));
   const sort = $('#libSort').value;
   if (sort === 'default') list.sort((a, b) => (a.c === b.c && a.ord != null && b.ord != null ? a.ord - b.ord : a.idx - b.idx));
   else if (sort === 'power') list.sort((a, b) => (b.c === 'move') - (a.c === 'move') || (b.pw || 0) - (a.pw || 0) || (a.ord || 0) - (b.ord || 0) || a.idx - b.idx);
   else if (sort === 'kana') list.sort((a, b) => toHira(a.ja).localeCompare(toHira(b.ja), 'ja'));
   else if (sort === 'en') list.sort((a, b) => a.en.localeCompare(b.en, 'en'));
-  else if (sort === 'paldea') list.sort((a, b) => (a.p || 9999) - (b.p || 9999) || (a.tm || 999) - (b.tm || 999));
+  else if (sort === 'paldea') list.sort((a, b) => (a.c === 'pokemon' && b.c === 'pokemon' ? a.ord - b.ord : (a.p || 9999) - (b.p || 9999) || (a.tm || 999) - (b.tm || 999)));
   else if (sort === 'national') list.sort((a, b) => (a.no || 9999) - (b.no || 9999) || (a.tm || 999) - (b.tm || 999));
   else if (sort === 'weak') list.sort((a, b) => (rate(a) ?? 2) - (rate(b) ?? 2));
 
@@ -613,7 +648,7 @@ if (!TYPE_KEYS[foodPow.t]) foodPow.t = '';
 function powMatch(s) {
   const m = s.match(/^(.+?)(?:：(.+?))? Lv\d$/);
   if (!m || m[1] !== foodPow.p) return false;
-  return !foodPow.t || m[2] === foodPow.t;
+  return !foodPow.t || m[2] === foodPow.t || m[2] === '全タイプ';
 }
 function foodMatch(e) {
   if (e.menu) return e.menu.sets ? e.menu.sets.some(([, p]) => p.some(powMatch)) : e.menu.powers.some(powMatch);
@@ -661,6 +696,7 @@ const libOpen = new Set(store.get('pmz.libOpen', []));
 function groupBody(k) {
   const items = libItems.filter((e) => e.c === k);
   const order = (typeof SUB_ORDER !== 'undefined' && SUB_ORDER[k]) || null;
+  if (k === 'pokemon') return dexFoldsHTML(items);
   if (k === 'shop') return shopMatrixHTML(items) + cardsHTML(items);
   if (k === 'food') return foodFilterHTML() + (items.length ? '' : '<p class="empty">この食事パワーが付く料理・材料はありません（ネタバレ範囲外のものは数えていません）。</p>') + subsHTML(k, items, order);
   if (!order) return cardsHTML(items);
@@ -684,7 +720,31 @@ function cardsHTML(list) {
 }
 function subBody(key) {
   const [k, sub] = key.split('/');
+  if (k === 'pokemon') return cardsHTML(dexItems(libItems.filter((e) => e.c === 'pokemon'), sub));
   return cardsHTML(libItems.filter((e) => e.c === k && e.sub === sub));
+}
+// ---- ポケモン：図鑑ごとの折りたたみ ----
+// 検索やタイプで絞り込んでいるときは、図鑑をまたいで1つの一覧にする（同じポケモンを何度も出さない）
+const DEX_FOLDS = () => DEXES.filter((d) => prefs.dex[d.id]).map((d) => [d.label, d.key]).concat(prefs.dex.paldea ? [['図鑑外（本編で手に入る）', '']] : [], prefs.dex.blueberry ? [['図鑑に載らない伝説・幻（藍の円盤）', '*']] : []);
+function dexItems(items, label) {
+  const f = DEX_FOLDS().find(([l]) => l === label);
+  if (!f) return [];
+  const key = f[1];
+  const a = key === '*' ? items.filter((e) => (e.t || []).includes('offdex2')) : key ? items.filter((e) => e[key]) : items.filter((e) => !e.p && !e.kd && !e.bd && !e.dlc);
+  const sort = $('#libSort').value;
+  return key && key !== '*' && (sort === 'default' || sort === 'paldea') ? a.slice().sort((x, y) => x[key] - y[key]) : a;
+}
+function dexFoldsHTML(items) {
+  if ($('#libSearch').value.trim() || libTypes.length) return cardsHTML(items);
+  return DEX_FOLDS().map(([label]) => [label, dexItems(items, label)]).filter(([, a]) => a.length).map(([label, a]) => {
+    const key = 'pokemon/' + label;
+    const open = libOpen.has(key);
+    const d = DEXES.find((x) => x.label === label);
+    return `<details class="lib-sub dex-fold${d ? ' dex-' + d.id : ''}" data-gcat="${esc(key)}"${open ? ' open' : ''}>
+      <summary><span>${esc(label)}${d ? `<small class="dex-desc">${esc(d.desc)}</small>` : ''}</span><span class="n">${a.length} 件</span></summary>
+      <div class="lib-body">${open ? cardsHTML(a) : ''}</div>
+    </details>`;
+  }).join('');
 }
 $('#libList').addEventListener('toggle', (ev) => {
   const d = ev.target;
@@ -743,6 +803,13 @@ function renderCoverage() {
     <div class="stat"><b>${n(count((e) => [e.jo, e.eo].some(Array.isArray)))}</b><span>由来の説を<br>複数並べた名前</span></div>
     <div class="stat"><b>${n(count((e) => !!e.unk))}</b><span>「分からないこと」<br>を書いた名前</span></div>`;
 
+  // 図鑑ごとのポケモンの数
+  $('#covDex').innerHTML = DEXES.map((d, i) => {
+    const n2 = count((e) => e.c === 'pokemon' && !!e[d.key]);
+    const only = count((e) => e.c === 'pokemon' && !!e[d.key] && e.dex.length === 1);
+    return `<div class="stat dex-${d.id}"><b>${n(n2)}</b><span>${esc(d.label)}<br><small>この図鑑だけ ${n(only)}</small></span></div>`;
+  }).join('');
+
   // カテゴリ：件数の棒と、開くと小分類
   const cats = CAT_KEYS.map((k, i) => ({ k, i, n: count((e) => e.c === k) }));
   const max = Math.max(...cats.map((c) => c.n));
@@ -764,7 +831,7 @@ function renderCoverage() {
   $('#covSpoil').innerHTML = `<div class="heat-scroll"><table class="heat"><thead><tr><th></th>${SPOILERS.map((s) => `<th>${esc(s.label)}</th>`).join('')}</tr></thead><tbody>${CAT_KEYS.map((k, r) => `<tr><th>${esc(CATS[k].short)}</th>${cells[r].map((x) => `<td${x / cmax > 0.55 ? ' class="hi"' : ''} style="--a:${x ? 0.12 + 0.88 * (x / cmax) : 0}">${x ? n(x) : '—'}</td>`).join('')}</tr>`).join('')}</tbody>
     <tfoot><tr><th>合計</th>${SPOILERS.map((_, i) => `<td>${n(count((e) => e.sp === i))}</td>`).join('')}</tr></tfoot></table></div>`;
 
-  $('#covConf').innerHTML = stackBar([3, 2, 1].map((c) => ({ label: ['', '★ 根拠が弱い・はっきりしない', '★★ 有力な説', '★★★ 綴りや語の対応がはっきり'][c], n: count((e) => e.cf === c) })))
+  $('#covConf').innerHTML = stackBar([3, 2, 1].map((c) => ({ label: ['', '★ 手がかりが弱い', '★★ 有力', '★★★ 綴りや言葉の対応がはっきり'][c], n: count((e) => e.cf === c) })))
     + `<p class="hint" style="margin:10px 0 0">★の数は、作者の推測の手ごたえの目安です。</p>`;
 }
 
@@ -777,8 +844,13 @@ function evoChecksHTML(prefix) {
   return `<label class="check"><input type="checkbox" data-${prefix}="evo"${prefs.evo ? ' checked' : ''}> ポケモンの進化の系統（進化前・進化後）を表示する<small>オフにすると、進化先の名前も表示されません</small></label>
     <label class="check"><input type="checkbox" data-${prefix}="evoHow"${prefs.evoHow ? ' checked' : ''}> 進化の方法・条件（レベル、道具、特別な条件など）を表示する</label>`;
 }
+function dexChecksHTML(prefix) {
+  return DEXES.map((d) => `<label class="check"><input type="checkbox" data-${prefix}="${d.id}"${prefs.dex[d.id] ? ' checked' : ''}>
+    <span><b>${esc(d.label)}</b>（${ENTRIES.filter((e) => e.c === 'pokemon' && e[d.key]).length} 種）<small>${esc(d.desc)}</small></span></label>`).join('');
+}
 function renderSettings() {
   renderVoiceSettings();
+  $('#dexChecks').innerHTML = dexChecksHTML('dex');
   $('#spoilChecks').innerHTML = spoilChecksHTML('sp', prefs.spoil);
   $('#catChecks').innerHTML = CAT_KEYS.map((k) => `<label class="check"><input type="checkbox" data-cat="${k}"${prefs.cats[k] ? ' checked' : ''}>
     <span>${esc(CATS[k].label)}（${ENTRIES.filter((e) => e.c === k).length}）</span></label>`).join('');
@@ -791,6 +863,13 @@ $('#spoilChecks').addEventListener('change', (ev) => {
   const i = ev.target.dataset.sp;
   if (i == null) return;
   prefs.spoil[Number(i)] = ev.target.checked; savePrefs(); refreshAll();
+});
+$('#dexChecks').addEventListener('change', (ev) => {
+  const k = ev.target.dataset.dex;
+  if (!k) return;
+  prefs.dex[k] = ev.target.checked;
+  if (!DEXES.some((d) => prefs.dex[d.id])) { prefs.dex.paldea = true; renderSettings(); }
+  savePrefs(); refreshAll();
 });
 $('#catChecks').addEventListener('change', (ev) => {
   const k = ev.target.dataset.cat;
@@ -815,6 +894,7 @@ function openGate() {
   const dlg = $('#gate');
   $('#gateChecks').innerHTML = spoilChecksHTML('gsp', prefs.spoil);
   $('#gateEvoChecks').innerHTML = evoChecksHTML('gevo');
+  $('#gateDexChecks').innerHTML = dexChecksHTML('gdex');
   if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
 }
 $('#gate').addEventListener('cancel', (ev) => { if (!store.get('pmz.ack', false)) ev.preventDefault(); });
@@ -823,6 +903,8 @@ $('#gateForm').addEventListener('submit', () => {
   if (!vals.some(Boolean)) vals[0] = true;
   prefs.spoil = vals;
   $$('#gateEvoChecks input').forEach((x) => { prefs[x.dataset.gevo] = x.checked; });
+  $$('#gateDexChecks input').forEach((x) => { prefs.dex[x.dataset.gdex] = x.checked; });
+  if (!DEXES.some((d) => prefs.dex[d.id])) prefs.dex.paldea = true;
   savePrefs();
   store.set('pmz.ack', true);
   refreshAll();

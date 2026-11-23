@@ -1,11 +1,13 @@
 // Offline support. Bump VERSION whenever app files change so installed apps pick up the update.
-const VERSION = 'pmz-v12';
+const VERSION = 'pmz-v20';
 const APP_FILES = [
   './',
   'index.html',
   'style.css',
   'app.js',
   'data-pokemon.js',
+  'data-pokemon-dlc.js',
+  'data-pokemon-extra.js',
   'data-tm.js',
   'data-movestats.js',
   'data-items.js',
@@ -21,6 +23,9 @@ const APP_FILES = [
   'data-shoplocs.js',
   'data-food.js',
   'data-natures.js',
+  'data-dlc.js',
+  'data-dlc-moves.js',
+  'data-dlc-fashion.js',
   'data.js',
   'favicon.svg',
   'manifest.webmanifest',

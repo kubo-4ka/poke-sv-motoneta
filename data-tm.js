@@ -127,7 +127,7 @@ var TM_ENTRIES = [
   [123, 'なみのり', 'Surf', '波乗り', 'surf（サーフィン）'],
   [125, 'かえんほうしゃ', 'Flamethrower', '火炎放射', 'flamethrower（火炎放射器）'],
   [126, '１０まんボルト', 'Thunderbolt', '10万ボルト（大きな電圧のたとえ）', 'thunderbolt（落雷）'],
-  [127, 'じゃれつく', 'Play Rough', 'じゃれつく', 'play rough（乱暴に遊ぶ）'],
+  [127, 'じゃれつく', 'Play Rough', '戯れつく（じゃれつく＝猫や子犬がまとわりついてふざけ遊ぶ。遊びのつもりでも相手には痛い、という技のイメージ）', 'play rough（乱暴に遊ぶ）'],
   [128, 'ドわすれ', 'Amnesia', 'ど忘れ', 'amnesia（記憶喪失）'],
   [129, 'めいそう', 'Calm Mind', '瞑想', 'calm mind（落ち着いた心）'],
   [130, 'てだすけ', 'Helping Hand', '手助け', 'helping hand（手助け）'],
